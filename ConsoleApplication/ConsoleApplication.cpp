@@ -174,6 +174,189 @@ void SomeOneShoot(IShooting* shooter)
 
 
 #pragma endregion
+
+#pragma region 类（含字段及虚方法，纯虚方法，非虚方法），接口（纯抽象类）多继承问题
+class GrandParent_A
+{
+public:
+	std::string a;
+	GrandParent_A()
+	{
+		a = "GrandParent_A";
+		std::cout << "GrandParent_A Constructed" << std::endl;
+	}
+	//static void Print()
+	//{
+	//	std::cout << "is GrandParent_A Function" << std::endl;
+	//}
+	void Print()
+	{
+		std::cout << "is GrandParent_A Function" << std::endl;
+	}
+	virtual void PrintVirtual()
+	{
+		std::cout << "is GrandParent_A virtual Function" << std::endl;
+	}
+
+	virtual void PrintPureVirtual() = 0;
+};
+
+class Parent_B :public GrandParent_A
+{
+public:
+	std::string b;
+	Parent_B()
+	{
+		b = "Parent_B";
+		std::cout << "Parent_B Constructed" << std::endl;
+	}
+	virtual void PrintVirtual()
+	{
+		std::cout << "is Parent_B virtual Function" << std::endl;
+	}
+	void PrintPureVirtual() override {
+		std::cout << "is Parent_B Purevirtual Function" << std::endl;
+
+	}
+};
+
+class Parent_C :public GrandParent_A
+{
+public:
+	std::string c;
+	Parent_C()
+	{
+		c = "Parent_C";
+		std::cout << "Parent_C Constructed" << std::endl;
+	}
+	virtual void PrintVirtual()
+	{
+		std::cout << "is Parent_C virtual Function" << std::endl;
+	}
+	void PrintPureVirtual() override {
+		std::cout << "is Parent_C Purevirtual Function" << std::endl;
+	}
+};
+
+class GrandSon_D :public Parent_B, public Parent_C
+{
+public:
+	std::string d;
+	GrandSon_D() {
+		d = "GrandSon_D";
+		std::cout << "GrandSon_D Constructed" << std::endl;
+	}
+	//virtual	void PrintVirtual()
+	//{
+	//	std::cout << "is GrandSon_D override Function" << std::endl;
+	//}
+
+};
+
+class Parent_VirtualB : virtual public GrandParent_A
+{
+public:
+	std::string b;
+	Parent_VirtualB()
+	{
+		b = "Parent_VirtualB";
+		std::cout << "Parent_VirtualB Constructed" << std::endl;
+	}
+	//virtual void PrintVirtual()
+	//{
+	//	std::cout << "is Parent_VirtualB virtual Function" << std::endl;
+	//}
+	void PrintPureVirtual() override {
+		std::cout << "is Parent_VirtualB Purevirtual Function" << std::endl;
+
+	}
+};
+
+class Parent_VirutalC :virtual public GrandParent_A
+{
+public:
+	std::string c;
+	Parent_VirutalC()
+	{
+		c = "Parent_VirutalC";
+		std::cout << "Parent_VirutalC Constructed" << std::endl;
+	}
+	//virtual void PrintVirtual()
+	//{
+	//	std::cout << "is Parent_VirutalC virtual Function" << std::endl;
+	//}
+	void PrintPureVirtual() override {
+		std::cout << "is Parent_VirutalC Purevirtual Function" << std::endl;
+	}
+};
+
+class GranSon_VirtualD :public Parent_VirtualB, public Parent_VirutalC
+{
+
+public:
+	std::string d;
+	GranSon_VirtualD() {
+		d = "GranSon_VirtualD";
+		std::cout << "GranSon_VirtualD Constructed" << std::endl;
+	}
+	void PrintPureVirtual() override {
+		std::cout << "is GranSon_VirtualD Purevirtual Function" << std::endl;
+	}
+};
+
+class IGrandP_A
+{
+public:
+	virtual void Print() = 0;
+	IGrandP_A()
+	{
+		std::cout << "IGrandP_A Constructed" << std::endl;
+	}
+};
+
+class IParent_B :public IGrandP_A
+{
+public:
+	//virtual void Print() = 0;
+	virtual void Print()
+	{
+		std::cout << "is IParent_B function" << std::endl;
+	}
+	IParent_B()
+	{
+		std::cout << "IParent_B Constructed" << std::endl;
+
+	}
+};
+
+class IParent_C :public IGrandP_A
+{
+public:
+	//virtual void Print() = 0;
+	virtual void Print()
+	{
+		std::cout << "is IParent_C function" << std::endl;
+	}
+	IParent_C()
+	{
+		std::cout << "IParent_C Constructed" << std::endl;
+
+	}
+};
+
+class GrandSon_ID :public IParent_B, public IParent_C
+{
+public:
+	void Print()
+	{
+		std::cout << "is GrandSon_ID function" << std::endl;
+	}
+	GrandSon_ID()
+	{
+		std::cout << "GrandSon_ID Constructed" << std::endl;
+
+	}
+};
 int main()
 {
 	std::cout << "Hello World!\n";
@@ -243,29 +426,58 @@ int main()
 #pragma endregion
 
 #pragma region 抽象与接口，士兵与猎人，开枪
-	SolidersBase* aa;
-	//SolidersBase bb;
-	SolidersBase* solider1 = new Cook(RANK::OR_1);
-	SolidersBase* solider2 = new Army(RANK::OR_2);
-	Hunter hunter;
+	//SolidersBase* aa;
+	////SolidersBase bb;
+	//SolidersBase* solider1 = new Cook(RANK::OR_1);
+	//SolidersBase* solider2 = new Army(RANK::OR_2);
+	//Hunter hunter;
 
-	std::cout << "solider1:" << solider1->GetRank() << "; " << "solider2:" << solider2->GetRank() << std::endl;
-	SomeOneShoot(&hunter);
-	SomeOneShoot((IShooting*)(Army*)(solider2));
-	if (auto* ifun = dynamic_cast<IShooting*>(solider1))
-		SomeOneShoot(ifun);
-	else
-	{
-		std::cout << "don't know shooting" << std::endl;
-	}
-	if (auto* ifun = dynamic_cast<IShooting*>(solider2))
-		SomeOneShoot(ifun);
-	else
-	{
-		std::cout << "don't know shooting" << std::endl;
-	}
+	//std::cout << "solider1:" << solider1->GetRank() << "; " << "solider2:" << solider2->GetRank() << std::endl;
+	//SomeOneShoot(&hunter);
+	//SomeOneShoot((IShooting*)(Army*)(solider2));
+	//if (auto* ifun = dynamic_cast<IShooting*>(solider1))
+	//	SomeOneShoot(ifun);
+	//else
+	//{
+	//	std::cout << "don't know shooting" << std::endl;
+	//}
+	//if (auto* ifun = dynamic_cast<IShooting*>(solider2))
+	//	SomeOneShoot(ifun);
+	//else
+	//{
+	//	std::cout << "don't know shooting" << std::endl;
+	//}
 
 #pragma endregion
+
+#pragma region 类（含字段及抽象方法，非抽象方法），接口（纯抽象类）多继承问题
+	GrandSon_D d;
+	//std::cout << d.a << std::endl; //"GrandSon Da”不明确
+	std::cout << d.Parent_B::a << std::endl;
+	std::cout << d.Parent_C::a << std::endl;
+	//d.Print(); //"GrandSonD::Print"不明确
+	d.Parent_C::Print();
+	d.Parent_B::Print();
+	//d.PrintVirtual(); //"GrandSonD::PrintVirtual不明确
+	d.Parent_C::PrintVirtual();
+	d.Parent_B::PrintVirtual();
+	//d.PrintPureVirtual(); //"GrandSonD:PrintPureVirtual"不明确
+	d.Parent_C::PrintPureVirtual();
+	d.Parent_B::PrintPureVirtual();
+
+	std::cout << "--------------------------------" << std::endl;
+
+	GrandSon_ID id;
+	id.Print();
+	std::cout << "--------------------------------" << std::endl;
+
+	GranSon_VirtualD vd;
+	vd.Print();
+	vd.PrintVirtual();
+	vd.PrintPureVirtual();
+
+#pragma endregion
+
 
 }
 
