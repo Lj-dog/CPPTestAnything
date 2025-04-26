@@ -253,6 +253,7 @@ public:
 
 };
 
+#pragma region 虚继承
 class Parent_VirtualB : virtual public GrandParent_A
 {
 public:
@@ -303,7 +304,10 @@ public:
 		std::cout << "is GranSon_VirtualD Purevirtual Function" << std::endl;
 	}
 };
+#pragma endregion
 
+
+#pragma region 接口实现
 class IGrandP_A
 {
 public:
@@ -357,6 +361,9 @@ public:
 
 	}
 };
+
+#pragma endregion
+
 int main()
 {
 	std::cout << "Hello World!\n";
@@ -472,6 +479,7 @@ int main()
 	std::cout << "--------------------------------" << std::endl;
 
 	GranSon_VirtualD vd;
+	std::cout << vd.a << std::endl;
 	vd.Print();
 	vd.PrintVirtual();
 	vd.PrintPureVirtual();
